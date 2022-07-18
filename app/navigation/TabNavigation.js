@@ -91,8 +91,8 @@ export default function TabNavigation() {
                     // You can return any component that you like here!
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: 'tomato',
-                tabBarInactiveTintColor: 'gray',
+                tabBarActiveTintColor: '#02CCFF',
+                tabBarInactiveTintColor: 'black',
             })}
         >
             {/* <Tab.Screen name="Home" component={HomeScreen} />
