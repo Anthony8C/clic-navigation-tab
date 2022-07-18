@@ -77,7 +77,7 @@ export default function TabNavigation() {
     return (
         <Tab.Navigator 
             screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
+                tabBarLabel:() => {return null},  tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
                     if (route.name === 'Computer') {
