@@ -8,7 +8,7 @@ export default function Login(props) {
 
     const login = () => {
         
-        console.log(props);
+       navigation.navigate("Main");
     }
 
     return (
