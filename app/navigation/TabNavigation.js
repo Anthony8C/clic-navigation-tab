@@ -3,6 +3,12 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Compras from '../screens/Main/Compras';
+import Search from '../screens/Main/Search';
+import Favoritos from '../screens/Main/Favoritos';
+import Opciones from '../screens/Main/Opciones';
+import User from '../screens/Main/User';
+import Computer from '../screens/Main/Computer';
 
 /* function HomeScreen() {
     return (
@@ -20,7 +26,7 @@ function SettingsScreen() {
     );
 } */
 
-function ComputerScreen(){
+/* function ComputerScreen(){
     return(
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Articulos!</Text>
@@ -64,12 +70,12 @@ function UserScreen(){
         </View>
     )
 }
-
+ */
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
     return (
-        <Tab.Navigator
+        <Tab.Navigator 
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -97,12 +103,12 @@ export default function TabNavigation() {
         >
             {/* <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Settings" component={SettingsScreen} /> */}
-            <Tab.Screen name="Computer" component={ComputerScreen}/>
-            <Tab.Screen name="Search" component={SearchScreen}/>
-            <Tab.Screen name="Favorito" component={FavoritosScreen}/>
-            <Tab.Screen name="Compras" component={ComprasScreen}/>
-            <Tab.Screen name="Opciones" component={OpcionesScreen}/>
-            <Tab.Screen name="User" component={UserScreen}/>
+            <Tab.Screen name="Computer" component={Computer} options={{headerShown: false}} />
+            <Tab.Screen name="Search" component={Search} options={{headerShown: false}}/>
+            <Tab.Screen name="Favorito" component={Favoritos} options={{headerShown: false}}/>
+            <Tab.Screen name="Compras" component={Compras} options={{headerShown: false}}/>
+            <Tab.Screen name="Opciones" component={Opciones} options={{headerShown: false}}/>
+            <Tab.Screen name="User" component={User} options={{headerShown: false}}/>
         </Tab.Navigator>
     );
 }
