@@ -1,14 +1,36 @@
-import React, {useState} from "react";
-import { View, Text, StyleSheet, Image, TextInput, Pressable } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TextInput, Pressable, Alert,navigation,navigate} from "react-native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { authentication } from "../config/firebase";
 
-export default function Login(props) {
-    const {navigation} = props;
+export default function Login({ navigation }) {
+    // Hooks de estado 
+    // Funciones que nos permiten recuperar el valor de esa variable 
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
     const login = () => {
-        
-       navigation.navigate("Main");
+        if (!email) {
+            Alert.alert("Correo electrónico es requerido");
+        } else if (!password) {
+            Alert.alert("Contraseña es requerida");
+        } else {
+            signInWithEmailAndPassword(authentication, email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    Alert.alert("Usuario " + user.email + " iniciado correctamente");
+                    // ...
+                    navigation.navigate("Main");
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;            
+                    Alert.alert("Error: " + errorCode + "Message: " + errorMessage);
+                    setEmail(null);
+                    setPassword(null);
+                });
+        }     
     }
 
     return (
@@ -37,8 +59,8 @@ export default function Login(props) {
             >
                 <Text style={styles.textButton}>Iniciar Sesión</Text>
             </Pressable>
-            <Text onPress={() => navigation.navigate("Register")} 
-            style={styles.link}>¿No tienes una cuenta?</Text>
+            <Text onPress={() => navigation.navigate("Register")}
+                style={styles.link}>¿No tienes una cuenta?</Text>
         </View>
     );
 
@@ -57,7 +79,7 @@ const styles = StyleSheet.create({
         marginTop: 100,
         marginBottom: 30,
     },
-    title:{
+    title: {
         marginBottom: 50,
     },
     input: {
@@ -76,7 +98,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#02CCFF",
         borderRadius: 7,
         width: 300,
-        height: 40,
+        height: 50,
         alignItems: "center",
         justifyContent: "center",
     },
@@ -86,8 +108,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     link: {
-        marginTop:20,
-        color:"#02CCFF",
+        marginTop: 20,
+        color: "#02CCFF",
         fontWeight: "bold",
     }
 });
