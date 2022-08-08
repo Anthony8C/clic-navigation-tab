@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, TextInput, Pressable, Alert,navigation,navigate} from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, Pressable, Alert, navigation, navigate } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { authentication } from "../config/firebase";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default function Login({ navigation }) {
     // Hooks de estado 
@@ -25,13 +26,40 @@ export default function Login({ navigation }) {
                 })
                 .catch((error) => {
                     const errorCode = error.code;
-                    const errorMessage = error.message;            
+                    const errorMessage = error.message;
                     Alert.alert("Error: " + errorCode + "Message: " + errorMessage);
                     setEmail(null);
                     setPassword(null);
                 });
-        }     
+        }
     }
+
+   /*  const loginGoogle = () => {
+        if (!email) {
+            Alert.alert("Correo electrónico es requerido");
+        } else if (!password) {
+            Alert.alert("Contraseña es requerida");
+        } else {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    // The signed-in user info.
+                    const user = result.user;
+                    // ...
+                }).catch((error) => {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // The email of the user's account used.
+                    const email = error.customData.email;
+                    // The AuthCredential type that was used.
+                    const credential = GoogleAuthProvider.credentialFromError(error);
+                    // ...
+                });
+        }
+    } */
 
     return (
         <View style={styles.container}>
@@ -58,6 +86,12 @@ export default function Login({ navigation }) {
                 style={styles.button}
             >
                 <Text style={styles.textButton}>Iniciar Sesión</Text>
+            </Pressable>
+            <Pressable
+               /*  onPress={loginGoogle} */
+                style={styles.button}
+            >
+                <Text style={styles.textButton}>Login con Google</Text>
             </Pressable>
             <Text onPress={() => navigation.navigate("Register")}
                 style={styles.link}>¿No tienes una cuenta?</Text>
@@ -92,7 +126,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     button: {
-        marginTop: 30,
+        marginTop: 20,
         marginBottom: 30,
         padding: 10,
         backgroundColor: "#02CCFF",
