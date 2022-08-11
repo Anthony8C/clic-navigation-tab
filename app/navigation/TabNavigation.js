@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Compras from '../screens/Main/Compras';
 import Search from '../screens/Main/Search';
 import Favoritos from '../screens/Main/Favoritos';
-import Opciones from '../screens/Main/Opciones';
+import Create from '../screens/Main/Create';
 import User from '../screens/Main/User';
 import Computer from '../screens/Main/Computer';
 
@@ -88,7 +88,7 @@ export default function TabNavigation() {
                         iconName = focused ? 'heart' : 'heart-outline' ;
                     }else if (route.name === 'Compras'){
                         iconName = focused ? 'cart' : 'cart-outline' ;
-                    }else if (route.name === 'Opciones'){
+                    }else if (route.name === 'Create'){
                         iconName = focused ? 'add-circle' : 'add-circle-outline' ;
                     }else if (route.name === 'User'){
                         iconName = focused ? 'person' : 'person-outline' ;
@@ -107,7 +107,7 @@ export default function TabNavigation() {
             <Tab.Screen name="Search" component={Search} options={{headerShown: false}}/>
             <Tab.Screen name="Favorito" component={Favoritos} options={{headerShown: false}}/>
             <Tab.Screen name="Compras" component={Compras} options={{headerShown: false}}/>
-            <Tab.Screen name="Opciones" component={Opciones} options={{headerShown: false}}/>
+            <Tab.Screen name="Create" component={Create} options={{headerShown: false}}/>
             <Tab.Screen name="User" component={User} options={{headerShown: false}}/>
         </Tab.Navigator>
     );

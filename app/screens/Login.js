@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, Pressable, Alert, navigation, navigate } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { authentication } from "../config/firebase";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+/* import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; */
 
 export default function Login({ navigation }) {
     // Hooks de estado 
