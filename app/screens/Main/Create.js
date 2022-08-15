@@ -33,7 +33,7 @@ export default function Create() {
       placeholder="Precio"
       keyboardType='decimal-pad'
       />
-       <Text style={styles.title}>Compra Fácil y Rápido</Text>
+       <Text style={styles.title}>Selecciona una imágen</Text>
        <Image
         style={styles.tinyLogo}
         source={require('../../../assets/noImage.png')}
@@ -42,7 +42,7 @@ export default function Create() {
         /* onPress={} */
         style={styles.button}
        >
-        <Text style={styles.textButton}>Crear</Text>
+        <Text style={styles.textButton}>Crear Producto</Text>
        </Pressable>
     </View>
   )
