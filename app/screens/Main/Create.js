@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet } from 'react-native'
+import { View, Text,StyleSheet,Image, Pressable } from 'react-native'
 import React from 'react'
 import { TextInput } from 'react-native-gesture-handler';
 
@@ -33,6 +33,17 @@ export default function Create() {
       placeholder="Precio"
       keyboardType='decimal-pad'
       />
+       <Text style={styles.title}>Compra Fácil y Rápido</Text>
+       <Image
+        style={styles.tinyLogo}
+        source={require('../../../assets/noImage.png')}
+       />
+       <Pressable
+        /* onPress={} */
+        style={styles.button}
+       >
+        <Text style={styles.textButton}>Crear</Text>
+       </Pressable>
     </View>
   )
 }
@@ -65,5 +76,27 @@ const styles = StyleSheet.create({
     borderRadius:5,
     borderColor: '#02CCFF',
     padding:10
+  },
+  tinyLogo: {
+      width: 250,
+      height: 215,
+      marginTop: 25,
+      marginBottom: 30,
+  },
+  button: {
+      marginTop: 20,
+      marginBottom: 30,
+      padding: 10,
+      backgroundColor: "#02CCFF",
+      borderRadius: 7,
+      width: 300,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+  },
+  textButton: {
+      color: "#fff",
+      fontSize: 18,
+      fontWeight: "bold",
   }
 });
