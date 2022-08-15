@@ -1,6 +1,8 @@
-import { View, Text,StyleSheet,Image, Pressable } from 'react-native'
 import React from 'react'
-import { TextInput } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Image, Pressable,TextInput, Alert } from 'react-native'
+import { doc, setDoc } from "firebase/firestore";
+import { idGenerator } from '../../../utils/idGenerator';
+import { db } from '../../config/firebase';
 
 export default function Create() {
 
@@ -9,41 +11,63 @@ export default function Create() {
   const [description, setDescription] = React.useState('');
   const [price, setPrice] = React.useState(null);
 
+  const createProduct = async () => {
+    if (!productName) {
+      Alert.alert("Todos los datos son obligatorios");
+    } else if (!description) {
+      Alert.alert("Todos los datos son obligatorios");
+    } else if (!price) {
+      Alert.alert("Todos los datos son obligatorios");
+    } else {
+      const id = idGenerator(10);
+      await setDoc(doc(db, "products", id), {
+        id: id,
+        productName: productName,
+        description: description,
+        price: price
+      });
+      Alert.alert("Producto Agregado");
+      setProductName(null);
+      setDescription(null);
+      setPrice(null);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Crear Productos!</Text>
       <TextInput
-      style={styles.input}
-      onChange={(value) => setProductName=(value)}
-      value={productName}
-      placeholder="Nombre del Producto"
-      />
-       <TextInput
-      style={styles.textArea}
-      onChange={(value) => setDescription=(value)}
-      value={description}
-      placeholder="Descripción"
-      multiline
-      numberOfLines={3}
+        style={styles.input}
+        onChangeText={setProductName}
+        value={productName}
+        placeholder="Nombre del Producto"
       />
       <TextInput
-      style={styles.input}
-      onChange={(value) => setPrice=(value)}
-      value={price}
-      placeholder="Precio"
-      keyboardType='decimal-pad'
+        style={styles.textArea}
+        onChangeText={setDescription}
+        value={description}
+        placeholder="Descripción"
+        multiline
+        numberOfLines={3}
       />
-       <Text style={styles.title}>Selecciona una imágen</Text>
-       <Image
+      <TextInput
+        style={styles.input}
+        onChangeText={setPrice}
+        value={price}
+        placeholder="Precio"
+        keyboardType='decimal-pad'
+      />
+      <Text style={styles.title}>Selecciona una imágen</Text>
+      <Image
         style={styles.tinyLogo}
         source={require('../../../assets/noImage.png')}
-       />
-       <Pressable
-        /* onPress={} */
+      />
+      <Pressable
+        onPress={createProduct}
         style={styles.button}
-       >
+      >
         <Text style={styles.textButton}>Crear Producto</Text>
-       </Pressable>
+      </Pressable>
     </View>
   )
 }
@@ -56,47 +80,47 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize:20,
+    fontSize: 20,
     fontWeight: "bold",
   },
-  input:{
-    marginTop:10,
-    borderWidth:2,
-    width:340,
-    height:50,
-    borderRadius:5,
+  input: {
+    marginTop: 10,
+    borderWidth: 2,
+    width: 340,
+    height: 50,
+    borderRadius: 5,
     borderColor: '#02CCFF',
-    padding:10
+    padding: 10
   },
-  textArea:{
-    marginTop:10,
-    borderWidth:2,
-    width:340,
-    height:100,
-    borderRadius:5,
+  textArea: {
+    marginTop: 10,
+    borderWidth: 2,
+    width: 340,
+    height: 100,
+    borderRadius: 5,
     borderColor: '#02CCFF',
-    padding:10
+    padding: 10
   },
   tinyLogo: {
-      width: 250,
-      height: 215,
-      marginTop: 25,
-      marginBottom: 30,
+    width: 250,
+    height: 215,
+    marginTop: 25,
+    marginBottom: 30,
   },
   button: {
-      marginTop: 20,
-      marginBottom: 30,
-      padding: 10,
-      backgroundColor: "#02CCFF",
-      borderRadius: 7,
-      width: 300,
-      height: 50,
-      alignItems: "center",
-      justifyContent: "center",
+    marginTop: 20,
+    marginBottom: 30,
+    padding: 10,
+    backgroundColor: "#02CCFF",
+    borderRadius: 7,
+    width: 300,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
   textButton: {
-      color: "#fff",
-      fontSize: 18,
-      fontWeight: "bold",
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   }
 });
