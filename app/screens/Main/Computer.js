@@ -76,5 +76,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  item: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  img: {
+    width: 40,
+    height: 25,
+    marginTop: 100
+  },
+  imageProduct: {
+    width: 250,
+    height: 125,
+    marginTop: 100,
+    marginBottom: 30
+  },
+  info: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  textName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    alignContent: "left"
+
+  },
+  textDescription: {
+    fontSize: 10,
+    fontWeight: "bold",
+    alignContent: "left"
+  },
+  textPrice:{
+    fontSize: 10,
+    fontWeight: "bold",
+    alignContent: "right",
+    color:"#02CCFF"
   }
 });
