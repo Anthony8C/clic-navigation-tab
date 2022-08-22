@@ -1,18 +1,16 @@
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, View, Image, SafeAreaView, FlatList } from 'react-native'
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { FlatList } from 'react-native-gesture-handler';
-import { View } from 'react-native-web';
-
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '../../config/firebase';
 
 export default function Computer() {
-  const [productList, setProductList] = React.useState("");
-  const [id, setId] = React.useState("");
-  const [productName, setProductName] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [image, setImage] = React.useState("");
-  const [price, setPrice] = React.useState("");
+
+  const [productList, setProductList] = React.useState([]);
+  /*  const [id, setId] = React.useState("");
+   const [productName, setProductName] = React.useState("");
+   const [description, setDescription] = React.useState("");
+   const [image, setImage] = React.useState("");
+   const [price, setPrice] = React.useState(""); */
 
 
   React.useEffect(() => {
@@ -33,24 +31,25 @@ export default function Computer() {
   }, []);
 
   const renderItem = ({ item }) => {
-    <View style={styles.item} key={item.id}>
+    return (
+      <View style={styles.item} key={item.id}>
 
-      <View style={styles.img}>
-        <Image
-          style={styles.imageProduct}
-          source={require('../../../assets/item.png')}
-        />
-      </View>
+        <View style={styles.img}>
+          <Image
+            style={styles.imageProduct}
+            source={require('../../../assets/item.png')}
+          />
+        </View>
 
-      <View style={styles.info}>
-        <Text style={styles.textName}>{item.productName}</Text>
-        <Text style={styles.textDescription}>{item.description}</Text>
-        <Text style={styles.textPrice}>{item.price}</Text>
+        <View style={styles.info}>
+          <Text style={styles.textName}>{item.productName}</Text>
+          <Text style={styles.textDescription}>{item.description}</Text>
+          <Text style={styles.textPrice}>${item.price}</Text>
+        </View>
       </View>
-      <View>
-      </View>
-    </View>
+    )
   }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,44 +72,46 @@ export default function Computer() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#C2C2C2',
     alignItems: 'center',
     justifyContent: 'center',
   },
   item: {
-    fontSize: 20,
-    fontWeight: "bold",
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    padding: 10,
+    marginTop: 10,
+    width: 360,
+    height: 100,
+    borderRadius: 5
   },
   img: {
-    width: 40,
-    height: 25,
-    marginTop: 100
+    width: "30%"
   },
   imageProduct: {
-    width: 250,
-    height: 125,
-    marginTop: 100,
-    marginBottom: 30
+    width: 80,
+    height: 70
   },
   info: {
-    fontSize: 15,
-    fontWeight: "bold",
+    width: "50%"
   },
   textName: {
-    fontSize: 20,
-    fontWeight: "bold",
-    alignContent: "left"
-
+    fontSize: 18,
+    fontWeight: "bold"
   },
   textDescription: {
-    fontSize: 10,
-    fontWeight: "bold",
-    alignContent: "left"
+    fontSize: 10
   },
-  textPrice:{
-    fontSize: 10,
+  textPrice: {
+    fontSize: 20,
     fontWeight: "bold",
-    alignContent: "right",
-    color:"#02CCFF"
+    textAlign: "right",
+    color: "#02CCFF"
+  },
+  textNoProducts: {
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "bold"
   }
 });
