@@ -1,16 +1,19 @@
-import { Text, StyleSheet, View, Image, SafeAreaView, FlatList } from 'react-native'
+import { Text, StyleSheet, View, Image, SafeAreaView, FlatList, Pressable, Alert, Modal, TextInput } from 'react-native'
 import React from 'react'
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../../config/firebase';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function Computer() {
 
   const [productList, setProductList] = React.useState([]);
-  /*  const [id, setId] = React.useState("");
-   const [productName, setProductName] = React.useState("");
-   const [description, setDescription] = React.useState("");
-   const [image, setImage] = React.useState("");
-   const [price, setPrice] = React.useState(""); */
+  const [modalEdit, setModalEdit] = React.useState(false);
+  const [id, setId] = React.useState("");
+  const [productName, setProductName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [image, setImage] = React.useState("");
+  const [price, setPrice] = React.useState("");
 
 
   React.useEffect(() => {
@@ -30,6 +33,22 @@ export default function Computer() {
     getProducts();
   }, []);
 
+  const editProduct = async () => {
+    if (!productName || !description || !price) {
+      Alert.alert("Todos los datos son obligatorios");
+    } else {
+      const docRef = doc(db,"product",id);
+
+      await updateDoc(docRef, {
+        productName: productName,
+        description: description,
+        price: price
+      });
+      Alert.alert("Producto Editado");
+    }
+  }
+
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.item} key={item.id}>
@@ -45,6 +64,17 @@ export default function Computer() {
           <Text style={styles.textName}>{item.productName}</Text>
           <Text style={styles.textDescription}>{item.description}</Text>
           <Text style={styles.textPrice}>${item.price}</Text>
+        </View>
+
+        <View style={styles.iconView}>
+          <Ionicons name={"create"} size={30} style={styles.icon}
+            onPress={function openEditModal() {
+              setModalEdit(true);
+              setProductName(item.productName);
+              setDescription(item.description);
+              setPrice(item.price);
+            }}
+          />
         </View>
       </View>
     )
@@ -64,6 +94,57 @@ export default function Computer() {
           <Text style={styles.textNoProducts}>No existen productos!!</Text>
         )
       }
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalEdit}
+        onRequestClose={() => {
+          setModalEdit(!modalEdit);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Editar Producto</Text>
+            <Text style={styles.modalText}>Id:{id}</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setProductName}
+              value={productName}
+              placeholder="Nombre del Producto"
+            />
+            <TextInput
+              style={styles.textArea}
+              onChangeText={setDescription}
+              value={description}
+              placeholder="Descripción"
+              multiline
+              numberOfLines={3}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={setPrice}
+              value={price}
+              placeholder="$ Precio"
+              keyboardType='decimal-pad'
+            />
+            <View style={styles.modalButtons}>
+              {/* Boton para cerrar la modal */}
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalEdit(!modalEdit)}
+              >
+                <Text style={styles.textStyle}>Cerrar</Text>
+              </Pressable>
+              {/* Boton para editar el producto */}
+              <Pressable
+                style={[styles.button, styles.buttonEdit]}
+                onPress={editProduct}
+              >
+                <Text style={styles.textStyle}>Editar Producto</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -113,5 +194,76 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 22,
     fontWeight: "bold"
+  },
+  icon: {
+    color: "#02CCFF",
+    marginLeft: 20,
+    padding: 1
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+    marginTop: 10
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  buttonEdit: {
+    backgroundColor: "#02CCFF",
+    marginLeft: 10
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  input: {
+    marginTop: 10,
+    borderWidth: 2,
+    width: 340,
+    height: 50,
+    borderRadius: 5,
+    borderColor: '#02CCFF',
+    padding: 10
+  },
+  textArea: {
+    marginTop: 10,
+    borderWidth: 2,
+    width: 340,
+    height: 100,
+    borderRadius: 5,
+    borderColor: '#02CCFF',
+    padding: 10
+  },
+  modalButtons: {
+    flexDirection: "row",
+    marginTop: 5
   }
+
 });
