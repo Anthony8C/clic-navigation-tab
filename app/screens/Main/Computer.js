@@ -1,11 +1,9 @@
-import { Text, StyleSheet, View, Image, SafeAreaView, FlatList, Pressable, Alert, Modal, TextInput } from 'react-native'
+import { Text, StyleSheet, View, Image, SafeAreaView, FlatList, Pressable, Alert, Modal, TextInput, NativeModules } from 'react-native'
 import React from 'react'
-import { collection, getDocs } from "firebase/firestore";
 import { db } from '../../config/firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { doc, updateDoc } from "firebase/firestore";
-import { deleteDoc } from "firebase/firestore";
-import { idGenerator } from '../../../utils/idGenerator';
+import { doc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
+
 
 export default function Computer() {
 
@@ -39,24 +37,14 @@ export default function Computer() {
     if (!productName || !description || !price) {
       Alert.alert("Todos los datos son obligatorios");
     } else {
-      const id = idGenerator(10);
-      await updateDoc(doc, (db, "products", id), {
+      const docRef = doc(db, "products", id);
+      await updateDoc(docRef, {
         productName: productName,
         description: description,
         price: price
       });
-      Alert.alert("Producto Editado");
+      NativeModules.DevSettings.reload();
     }
-  }
-
-  const deleteProducts = async () => {
-    const id = idGenerator(10);
-    await deleteDoc(doc, (db, 'products', id), {
-      productName: productName,
-      description: description,
-      price: price
-    });
-    Alert.alert("Producto Eliminado");
   }
 
   const renderItem = ({ item }) => {
@@ -80,13 +68,22 @@ export default function Computer() {
           <Ionicons name={"create"} size={30} style={styles.icon}
             onPress={function openEditModal() {
               setModalEdit(true);
+              setId(item.id);
               setProductName(item.productName);
               setDescription(item.description);
               setPrice(item.price);
             }}
           />
-          <Ionicons name={"trash"} size={30} style={styles.iconDelete}
-            onPress={deleteProducts}
+          <Ionicons name="trash" size={30} style={styles.iconDelete}
+            onPress={async () => {
+              try {
+                await deleteDoc(doc(db, 'products', item.id));
+                console.log('El producto se ha eliminado correctamente');
+                NativeModules.DevSettings.reload();
+              } catch (error) {
+                console.log(error);
+              }
+            }}
           />
         </View>
       </View>
