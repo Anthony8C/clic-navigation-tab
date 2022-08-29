@@ -4,6 +4,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from '../../config/firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { doc, updateDoc } from "firebase/firestore";
+import { deleteDoc } from "firebase/firestore";
+import { idGenerator } from '../../../utils/idGenerator';
 
 export default function Computer() {
 
@@ -37,9 +39,8 @@ export default function Computer() {
     if (!productName || !description || !price) {
       Alert.alert("Todos los datos son obligatorios");
     } else {
-      const docRef = doc(db,"product",id);
-
-      await updateDoc(docRef, {
+      const id = idGenerator(10);
+      await updateDoc(doc, (db, "products", id), {
         productName: productName,
         description: description,
         price: price
@@ -48,6 +49,15 @@ export default function Computer() {
     }
   }
 
+  const deleteProducts = async () => {
+    const id = idGenerator(10);
+    await deleteDoc(doc, (db, 'products', id), {
+      productName: productName,
+      description: description,
+      price: price
+    });
+    Alert.alert("Producto Eliminado");
+  }
 
   const renderItem = ({ item }) => {
     return (
@@ -74,6 +84,9 @@ export default function Computer() {
               setDescription(item.description);
               setPrice(item.price);
             }}
+          />
+          <Ionicons name={"trash"} size={30} style={styles.iconDelete}
+            onPress={deleteProducts}
           />
         </View>
       </View>
@@ -199,6 +212,11 @@ const styles = StyleSheet.create({
     color: "#02CCFF",
     marginLeft: 20,
     padding: 1
+  },
+  iconDelete: {
+    color: "#02CCFF",
+    marginLeft: 18,
+    padding: 2
   },
   centeredView: {
     flex: 1,
